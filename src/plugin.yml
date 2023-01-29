@@ -1,0 +1,6 @@
+name: FoPzlHoppers
+main: me.fopzl.hopper.FoPzlHoppers
+author: FoPzl
+depend: [NeoCore]
+version: 0.1
+api-version: 1.19
