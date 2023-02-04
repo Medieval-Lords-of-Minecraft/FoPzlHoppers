@@ -45,6 +45,11 @@ public class BlockListener implements Listener {
 		Hopper hopper = FoPzlHoppers.getHopperManager().removeHopper(loc);
 		ItemStack itemToDrop = Hopper.getItem(hopper.getLevel());
 		
+		for (ItemStack item : hopper.getInventory().getContents()) {
+			if (item == null || item.getType() == Material.AIR)
+				continue;
+			e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), item);
+		}
 		e.getBlock().getWorld().dropItemNaturally(loc, itemToDrop);
 		e.getBlock().setType(Material.AIR);
 
