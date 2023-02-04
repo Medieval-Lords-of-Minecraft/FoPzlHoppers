@@ -17,7 +17,10 @@ public class HopperManager {
 	}
 
 	public Hopper removeHopper(Location location) {
-		return hoppers.remove(location);
+		Hopper hopper = hoppers.remove(location);
+		if (hopper != null)
+			hopper.remove();
+		return hopper;
 	}
 	
 	public boolean isHopper(Location location) {

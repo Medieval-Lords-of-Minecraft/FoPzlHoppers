@@ -6,6 +6,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import me.fopzl.hoppers.commands.MainCommand;
 import me.fopzl.hoppers.listeners.BlockListener;
+import me.fopzl.hoppers.listeners.ItemListener;
 
 public class FoPzlHoppers extends JavaPlugin {
 	private static FoPzlHoppers instance;
@@ -26,6 +27,7 @@ public class FoPzlHoppers extends JavaPlugin {
 		}.runTaskTimer(this, 0, 1); // todo: configurable period
 		
 		Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
+		Bukkit.getPluginManager().registerEvents(new ItemListener(), this);
 		
 		this.getCommand("fopzlhoppers").setExecutor(new MainCommand());
 		this.getCommand("fopzlhoppers").setTabCompleter(new MainCommand());
