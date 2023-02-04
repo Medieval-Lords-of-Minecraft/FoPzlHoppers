@@ -20,33 +20,34 @@ public class BlockListener implements Listener {
 	public void onBlockPlace(BlockPlaceEvent e) {
 		if (e.getBlock().getType() != Material.HOPPER)
 			return;
-		
-		// TODO: handle max hoppers per chunk here
 
+		// TODO: handle max hoppers per chunk here
+		
 		NBTItem nbti = new NBTItem(e.getItemInHand());
 		if (!nbti.getBoolean("fopzlhopper"))
 			return;
-
+		
 		UUID uuid = e.getPlayer().getUniqueId();
 		int level = nbti.getInteger("level");
-		
+
 		FoPzlHoppers.getHopperManager().addHopper(new Hopper(e.getBlock(), uuid, level));
 	}
-
+	
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent e) {
 		if (e.getBlock().getType() != Material.HOPPER)
 			return;
-
+		
 		Location loc = e.getBlock().getLocation();
 		if (!FoPzlHoppers.getHopperManager().isHopper(loc))
 			return;
-		
+
 		Hopper hopper = FoPzlHoppers.getHopperManager().removeHopper(loc);
 		ItemStack itemToDrop = Hopper.getItem(hopper.getLevel());
-
-		e.getBlock().getWorld().dropItemNaturally(loc, itemToDrop);
 		
+		e.getBlock().getWorld().dropItemNaturally(loc, itemToDrop);
+		e.getBlock().setType(Material.AIR);
+
 		e.setCancelled(true);
 	}
 }
