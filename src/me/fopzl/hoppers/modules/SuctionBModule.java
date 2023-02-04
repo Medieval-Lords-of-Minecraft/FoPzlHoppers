@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Item;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ItemSpawnEvent;
@@ -13,17 +14,18 @@ import org.bukkit.inventory.ItemStack;
 
 import me.fopzl.hoppers.Hopper;
 import me.fopzl.hoppers.util.tuples.Pair;
+import me.fopzl.hoppers.util.tuples.Triplet;
 
 public class SuctionBModule extends HopperModule implements Listener {
 	private static final int suckRange = 3; // todo: configurable
 	
 	private static final int suckRangeSquared = suckRange * suckRange;
 	
-	// key is chunk coords, value is set of hoppers in that chunk
-	private static Map<Pair<Integer, Integer>, Set<Hopper>> hopperMap;
+	// key is chunk world and coords, value is set of hoppers in that chunk
+	private static Map<Triplet<World, Integer, Integer>, Set<Hopper>> hopperMap;
 
 	static {
-		hopperMap = new HashMap<Pair<Integer, Integer>, Set<Hopper>>();
+		hopperMap = new HashMap<Triplet<World, Integer, Integer>, Set<Hopper>>();
 	}
 
 	public SuctionBModule(Hopper hopper) {
@@ -63,7 +65,7 @@ public class SuctionBModule extends HopperModule implements Listener {
 
 		for (int x = chunkX - chunkRange; x <= chunkX + chunkRange; x++) {
 			for (int z = chunkZ - chunkRange; z <= chunkZ + chunkRange; z++) {
-				Set<Hopper> chunk = hopperMap.get(Pair.with(x, z));
+				Set<Hopper> chunk = hopperMap.get(Triplet.with(loc.getWorld(), x, z));
 				if (chunk != null) {
 					for (Hopper hopper : chunk) {
 						if (hopper.getLocation().distanceSquared(loc) < suckRangeSquared) {
@@ -80,10 +82,10 @@ public class SuctionBModule extends HopperModule implements Listener {
 	private static void addToMap(Hopper hopper) {
 		int chunkX = hopper.getLocation().getChunk().getX();
 		int chunkZ = hopper.getLocation().getChunk().getZ();
-		Pair<Integer, Integer> coords = Pair.with(chunkX, chunkZ);
-		Set<Hopper> set = hopperMap.getOrDefault(coords, new HashSet<Hopper>());
+		Triplet<World, Integer, Integer> triplet = Triplet.with(hopper.getLocation().getWorld(), chunkX, chunkZ);
+		Set<Hopper> set = hopperMap.getOrDefault(triplet, new HashSet<Hopper>());
 		set.add(hopper);
-		hopperMap.putIfAbsent(coords, set);
+		hopperMap.putIfAbsent(triplet, set);
 	}
 
 	@Override
