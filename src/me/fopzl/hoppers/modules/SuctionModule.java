@@ -6,27 +6,37 @@ import org.bukkit.inventory.ItemStack;
 
 import me.fopzl.hoppers.Hopper;
 
-public class SuctionAModule extends HopperModule {
+public class SuctionModule extends HopperModule {
+	// todo: auto-disable after extremely long period with no pickups
+
 	// todo: all these configurable
-	private static final int minTickPeriod = 20;
+	private static final int minTickPeriod = 10;
 	private static final int maxTickPeriod = 200;
-	private static final int tickPeriodDelta = 10; // period increase when no items picked up, or decrease when any are
-	private static final int suckRange = 3;
+	private static final int tickPeriodDelta = 5; // period increase when no items picked up, or decrease when any are
+	private static final int suckRange = 5;
 
 	private static final int suckRangeSquared = suckRange * suckRange;
 	
 	private int ticks;
 	private int tickPeriod;
 	
-	public SuctionAModule(Hopper hopper) {
+	public SuctionModule(Hopper hopper) {
 		super(hopper);
 		
 		tickPeriod = minTickPeriod;
 		ticks = tickPeriod;
 	}
+
+	@Override
+	protected void onEnable() {
+	}
+
+	@Override
+	protected void onDisable() {
+	}
 	
 	@Override
-	public void tick() {
+	protected void onTick() {
 		if (--ticks > 0)
 			return;
 		
@@ -71,9 +81,5 @@ public class SuctionAModule extends HopperModule {
 		tickPeriod -= tickPeriodDelta;
 		if (tickPeriod < minTickPeriod)
 			tickPeriod = minTickPeriod;
-	}
-
-	@Override
-	public void remove() {
 	}
 }

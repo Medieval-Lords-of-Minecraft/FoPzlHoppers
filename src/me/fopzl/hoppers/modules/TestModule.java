@@ -13,9 +13,19 @@ public class TestModule extends HopperModule {
 
 		ticks = 0;
 	}
+	
+	@Override
+	protected void onEnable() {
+		Bukkit.getPlayer(hopper.getOwner()).sendMessage("Enabling!");
+	}
 
 	@Override
-	public void tick() {
+	protected void onDisable() {
+		Bukkit.getPlayer(hopper.getOwner()).sendMessage("Disabling!");
+	}
+
+	@Override
+	protected void onTick() {
 		if (++ticks % 20 != 0)
 			return;
 		
@@ -24,10 +34,5 @@ public class TestModule extends HopperModule {
 		
 		Location loc = hopper.getLocation();
 		Bukkit.getPlayer(hopper.getOwner()).sendMessage("Level " + hopper.getLevel() + " hopper at x" + loc.getX() + " y" + loc.getY() + " z" + loc.getZ());
-	}
-
-	@Override
-	public void remove() {
-		Bukkit.getPlayer(hopper.getOwner()).sendMessage("Removing!");
 	}
 }

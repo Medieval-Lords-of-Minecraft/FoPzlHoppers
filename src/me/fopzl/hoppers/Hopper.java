@@ -14,8 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.fopzl.hoppers.modules.HopperModule;
-import me.fopzl.hoppers.modules.SuctionAModule;
-import me.fopzl.hoppers.modules.SuctionBModule;
+import me.fopzl.hoppers.modules.SuctionModule;
 import me.fopzl.hoppers.modules.TestModule;
 
 public class Hopper {
@@ -42,10 +41,7 @@ public class Hopper {
 			modules.add(new TestModule(this));
 			break;
 		case 2:
-			modules.add(new SuctionAModule(this));
-			break;
-		case 3:
-			modules.add(new SuctionBModule(this));
+			modules.add(new SuctionModule(this));
 			break;
 		}
 	}
@@ -68,13 +64,25 @@ public class Hopper {
 
 	public void remove() {
 		for (HopperModule module : modules) {
-			module.remove();
+			module.disable();
 		}
 	}
 	
 	public void tick() {
 		for (HopperModule module : modules) {
 			module.tick();
+		}
+	}
+
+	public void enable() {
+		for (HopperModule module : modules) {
+			module.enable();
+		}
+	}
+
+	public void disable() {
+		for (HopperModule module : modules) {
+			module.disable();
 		}
 	}
 
