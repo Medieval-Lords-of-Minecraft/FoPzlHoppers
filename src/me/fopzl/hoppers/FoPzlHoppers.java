@@ -2,9 +2,9 @@ package me.fopzl.hoppers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import me.fopzl.hoppers.commands.MainCommand;
+import me.fopzl.hoppers.configs.ConfigManager;
 import me.fopzl.hoppers.listeners.BlockListener;
 
 public class FoPzlHoppers extends JavaPlugin {
@@ -17,13 +17,8 @@ public class FoPzlHoppers extends JavaPlugin {
 		
 		instance = this;
 		hopperManager = new HopperManager();
-		
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				hopperManager.tickAll();
-			}
-		}.runTaskTimer(this, 0, 1);
+
+		ConfigManager.loadAllConfigs();
 		
 		Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
 		

@@ -1,0 +1,31 @@
+# settings in this file override defaults in respective module files
+
+# example file
+#1:
+#  module1:
+#    mod1setting1: true
+#    mod1setting2: 300
+#  module2:
+#    mod2setting1: "word"
+#    mod2setting3: false
+#2:
+#  module1:
+#    mod1setting1: true
+#    mod1setting2: 400
+#  module2:
+#    mod2setting1: "word"
+#    mod2setting3: true
+#  module3:
+#    mod3setting1: 100
+#    mod3setting2: 20
+#    mod3setting3: "word2"
+#3:
+#  module50:
+#    mod50setting1: true
+
+1:
+  test: {}
+2:
+  suction: {}
+3:
+  suction: {}

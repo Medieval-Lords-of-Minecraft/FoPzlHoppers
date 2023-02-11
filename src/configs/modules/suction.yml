@@ -1,0 +1,4 @@
+minTickPeriod: 10
+maxTickPeriod: 200
+tickPeriodDelta: 5
+suckRange: 5
