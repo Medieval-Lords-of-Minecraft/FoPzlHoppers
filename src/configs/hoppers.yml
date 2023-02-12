@@ -23,6 +23,8 @@
 #  module50:
 #    mod50setting1: true
 
+# modules without overriding settings must include this {}
+# blame stupid spigot config handling
 1:
   test: {}
 2:
