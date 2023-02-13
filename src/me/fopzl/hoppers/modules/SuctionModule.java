@@ -34,6 +34,11 @@ public class SuctionModule extends HopperModule {
 	}
 
 	@Override
+	protected void onReload() {
+		config = (SuctionConfig) ConfigManager.getConfig(hopper.getLevel(), "suction");
+	}
+
+	@Override
 	protected void onTick() {
 		if (--ticks > 0)
 			return;

@@ -31,14 +31,19 @@ public class FoPzlHoppers extends JavaPlugin {
 		this.getCommand("fopzlhoppers").setExecutor(new MainCommand());
 		this.getCommand("fopzlhoppers").setTabCompleter(new MainCommand());
 
-		Bukkit.getLogger().info("FoPzlHoppers Enabled");
+		Bukkit.getLogger().info("[FHOP] FoPzlHoppers Enabled");
 	}
 
 	@Override
 	public void onDisable() {
-		Bukkit.getLogger().info("FoPzlHoppers Disabled");
+		Bukkit.getLogger().info("[FHOP] FoPzlHoppers Disabled");
 
 		super.onDisable();
+	}
+
+	public static void reload() {
+		ConfigManager.loadAllConfigs();
+		hopperManager.reloadAll();
 	}
 
 	public static FoPzlHoppers getInstance() {

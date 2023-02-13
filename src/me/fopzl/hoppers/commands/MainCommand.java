@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import me.fopzl.hoppers.FoPzlHoppers;
 import me.fopzl.hoppers.Hopper;
 
 // temp for dev+debug for a while
@@ -17,10 +18,12 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 		if (!(sender instanceof Player))
 			return false;
 		
-		if (args.length < 2)
-			return false;
+		if (args.length >= 1 && args[0].equalsIgnoreCase("reload")) {
+			FoPzlHoppers.reload();
+			return true;
+		}
 		
-		if (args[0].equalsIgnoreCase("give")) {
+		if (args.length >= 2 && args[0].equalsIgnoreCase("give")) {
 			int lvl;
 			try {
 				lvl = Integer.parseInt(args[1]);
