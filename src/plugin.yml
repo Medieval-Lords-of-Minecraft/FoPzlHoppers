@@ -7,6 +7,7 @@ api-version: 1.19
 commands:
    fopzlhoppers:
       aliases: [fhop]
+      permission: fopzlhoppers.admin
 permissions:
    fopzlhoppers.admin:
       default: false
