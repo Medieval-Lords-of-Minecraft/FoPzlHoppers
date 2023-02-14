@@ -19,44 +19,46 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (!(sender instanceof Player))
 			return false;
-
+		
 		if (args.length >= 1 && args[0].equalsIgnoreCase("reload")) {
 			FoPzlHoppers.reload();
 			return true;
 		}
-
+		
 		if (args.length >= 3 && args[0].equalsIgnoreCase("give")) {
 			Player p = Bukkit.getPlayer(args[1]);
 			if (p == null)
 				return false;
-			
+
 			int lvl;
 			try {
 				lvl = Integer.parseInt(args[2]);
 			} catch (NumberFormatException e) {
 				return false;
 			}
-
+			
 			p.getInventory().addItem(Hopper.getItem(lvl));
 			return true;
 		}
-
+		
 		return false;
 	}
-	
+
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
 		List<String> autos = new ArrayList<String>();
-		
+
 		if (args.length == 1) {
 			autos.add("give");
 			autos.add("reload");
+		} else if (args.length == 2) {
+			return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
 		} else if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
 			for (var lvl : HopperConfig.getRegisteredLevels()) {
 				autos.add(lvl.toString());
 			}
 		}
-		
+
 		return autos;
 	}
 }

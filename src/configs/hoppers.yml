@@ -1,4 +1,5 @@
 # settings in this file override defaults in respective module files
+# NOTE: live changes to which modules are enabled by level are NOT supported
 
 # example file
 #1:
