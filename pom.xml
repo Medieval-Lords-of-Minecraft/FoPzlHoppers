@@ -101,9 +101,9 @@
 	<dependency>
 		<groupId>NeoCore</groupId>
 		<artifactId>NeoCore</artifactId>
-		<version>1.0</version>
+		<version>0.0.1-SNAPSHOT</version>
 		<scope>system</scope>
-		<systemPath>C:/Users/Alex/Documents/MLMC/Coding Stuff/workspace/FoPzlHoppers/resources/NeoCore.jar</systemPath>
+		<systemPath>C:/Users/Alex/Documents/MLMC/Coding Stuff/workspace/FoPzlHoppers/resources/NeoCore-0.0.1-SNAPSHOT.jar</systemPath>
 		<!-- because eclipse is garbage -->
 	</dependency>
   </dependencies>

@@ -9,6 +9,7 @@ import me.fopzl.hoppers.configs.modules.SuctionConfig;
 import me.fopzl.hoppers.listeners.BlockListener;
 import me.fopzl.hoppers.modules.SuctionModule;
 import me.fopzl.hoppers.modules.TestModule;
+import me.neoblade298.neocore.bukkit.NeoCore;
 
 public class FoPzlHoppers extends JavaPlugin {
 	private static FoPzlHoppers instance;
@@ -26,7 +27,11 @@ public class FoPzlHoppers extends JavaPlugin {
 		
 		ConfigManager.loadAllConfigs();
 
+		HopperIO.loadData();
+
 		Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
+		
+		NeoCore.registerIOComponent(this, new HopperIO(), "FoPzlHoppersIO");
 
 		this.getCommand("fopzlhoppers").setExecutor(new MainCommand());
 		this.getCommand("fopzlhoppers").setTabCompleter(new MainCommand());

@@ -30,7 +30,10 @@ public class BlockListener implements Listener {
 		UUID uuid = e.getPlayer().getUniqueId();
 		int level = nbti.getInteger("level");
 
-		FoPzlHoppers.getHopperManager().addHopper(new Hopper(e.getBlock(), uuid, level));
+		Hopper hopper = new Hopper(e.getBlock(), uuid, level);
+		FoPzlHoppers.getHopperManager().addHopper(hopper);
+		hopper.enable();
+		hopper.updated();
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

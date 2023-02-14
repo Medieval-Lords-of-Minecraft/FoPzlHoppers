@@ -4,8 +4,8 @@ import me.fopzl.hoppers.Hopper;
 
 public abstract class HopperModule {
 	protected final Hopper hopper;
-
-	private boolean enabled;
+	
+	protected boolean enabled;
 	
 	public HopperModule(Hopper hopper) {
 		this.hopper = hopper;
@@ -15,11 +15,13 @@ public abstract class HopperModule {
 	public final void enable() {
 		enabled = true;
 		onEnable();
+		hopper.updated();
 	}
 	
 	public final void disable() {
 		enabled = false;
 		onDisable();
+		hopper.updated();
 	}
 
 	public final void reload() {
@@ -37,6 +39,8 @@ public abstract class HopperModule {
 	public final boolean isEnabled() {
 		return enabled;
 	}
+	
+	public abstract String getName();
 
 	protected abstract void onEnable();
 
@@ -45,4 +49,8 @@ public abstract class HopperModule {
 	protected abstract void onReload();
 
 	protected abstract void onTick();
+	
+	public abstract String getSaveData();
+
+	public abstract void loadData(String data);
 }
