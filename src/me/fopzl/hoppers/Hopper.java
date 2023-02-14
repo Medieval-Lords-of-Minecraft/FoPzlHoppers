@@ -110,9 +110,10 @@ public class Hopper {
 					"delete from fopzlhoppers_hoppers where world = '" + world + "' and locX = " + locX + " and locY = " + locY + " and locZ = " + locZ + ";"
 			);
 		} else {
-			insert.addBatch(
+			// hacky but whatever, this needs to run before module inserts
+			delete.addBatch(
 					"insert into fopzlhoppers_hoppers (world, locX, locY, locZ, ownerUUID, level) values ('" + world + "', " + locX + ", " + locY + ", " + locZ
-							+ ", '" + ownerUUID + "', " + level + ") on duplicate update level = level;"
+							+ ", '" + ownerUUID + "', " + level + ") on duplicate key update level = level;"
 			);
 			
 			delete.addBatch(
