@@ -19,84 +19,82 @@ import me.fopzl.hoppers.modules.HopperModule;
 
 public class Hopper {
 	private final Inventory inventory;
-
+	
 	private final Location loc;
 	private final UUID owner; // player
 	private final int level;
-	
+
 	private final Set<HopperModule> modules;
-
+	
 	private boolean markedForRemoval = false;
-
+	
 	public Hopper(Location loc, UUID owner, int level) {
 		this(loc.getBlock(), owner, level);
 	}
-
+	
 	public Hopper(Block block, UUID owner, int level) {
 		this.loc = block.getLocation();
 		this.owner = owner;
 		this.level = level;
 
-		((org.bukkit.block.data.type.Hopper) block.getBlockData()).setEnabled(false); // <-- doesn't work (todo: fix)
-
 		this.inventory = ((org.bukkit.block.Hopper) block.getState()).getInventory();
-
+		
 		modules = HopperConfig.getModules(this);
 	}
-	
+
 	public void reload() {
 		for (HopperModule module : modules) {
 			module.reload();
 		}
 	}
-
+	
 	public Inventory getInventory() {
 		return inventory;
 	}
-	
+
 	public Location getLocation() {
 		return loc;
 	}
-	
+
 	public UUID getOwner() {
 		return owner;
 	}
-	
+
 	public int getLevel() {
 		return level;
 	}
-	
+
 	public void remove() {
 		for (HopperModule module : modules) {
 			module.disable();
 		}
-		
+
 		markedForRemoval = true;
 		updated();
 	}
-
+	
 	public void tick() {
 		for (HopperModule module : modules) {
 			module.tick();
 		}
 	}
-	
+
 	public void enable() {
 		for (HopperModule module : modules) {
 			module.enable();
 		}
 	}
-	
+
 	public void disable() {
 		for (HopperModule module : modules) {
 			module.disable();
 		}
 	}
-	
+
 	public void updated() {
 		FoPzlHoppers.getHopperManager().hopperUpdated(this);
 	}
-
+	
 	public void sqlSave(Statement insert, Statement delete) throws SQLException {
 		String world = loc.getWorld().getName();
 		int locX = loc.getBlockX();
@@ -104,7 +102,7 @@ public class Hopper {
 		int locZ = loc.getBlockZ();
 		String ownerUUID = owner.toString();
 		int level = this.level;
-		
+
 		if (markedForRemoval) {
 			delete.addBatch(
 					"delete from fopzlhoppers_hoppers where world = '" + world + "' and locX = " + locX + " and locY = " + locY + " and locZ = " + locZ + ";"
@@ -115,17 +113,17 @@ public class Hopper {
 					"insert into fopzlhoppers_hoppers (world, locX, locY, locZ, ownerUUID, level) values ('" + world + "', " + locX + ", " + locY + ", " + locZ
 							+ ", '" + ownerUUID + "', " + level + ") on duplicate key update level = level;"
 			);
-			
+
 			delete.addBatch(
 					"delete from fopzlhoppers_modules where world = '" + world + "' and locX = " + locX + " and locY = " + locY + " and locZ = " + locZ + ";"
 			);
-
+			
 			for (HopperModule module : modules) {
 				String moduleName = module.getName();
 				String data = module.getSaveData();
 				if (data == null)
 					continue;
-				
+
 				insert.addBatch(
 						"insert into fopzlhoppers_modules (world, locX, locY, locZ, moduleName, data) values ('" + world + "', " + locX + ", " + locY + ", "
 								+ locZ + ", '" + moduleName + "', '" + data + "');"
@@ -133,7 +131,7 @@ public class Hopper {
 			}
 		}
 	}
-	
+
 	public void sqlLoad(String moduleName, String data) {
 		for (var module : modules) {
 			if (module.getName().equals(moduleName)) {
@@ -141,19 +139,19 @@ public class Hopper {
 			}
 		}
 	}
-	
+
 	public static ItemStack getItem(int level) {
 		ItemStack item = new ItemStack(Material.HOPPER);
-
+		
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName("§eLevel " + level + " Hopper");
 		meta.setLore(Arrays.asList("§6§oFoPzlHoppers"));
 		item.setItemMeta(meta);
-
+		
 		NBTItem nbt = new NBTItem(item);
 		nbt.setBoolean("fopzlhopper", true);
 		nbt.setInteger("level", level);
-		
+
 		return nbt.getItem();
 	}
 }
