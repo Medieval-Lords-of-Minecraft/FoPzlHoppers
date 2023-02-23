@@ -7,6 +7,8 @@ import org.bukkit.inventory.ItemStack;
 import me.fopzl.hoppers.Hopper;
 import me.fopzl.hoppers.configs.ConfigManager;
 import me.fopzl.hoppers.configs.modules.SuctionConfig;
+import me.fopzl.hoppers.gui.modules.SuctionGUI;
+import me.neoblade298.neocore.bukkit.inventories.CoreInventory;
 
 public class SuctionModule extends HopperModule {
 	private final static String name = "suction";
@@ -30,6 +32,11 @@ public class SuctionModule extends HopperModule {
 	@Override
 	public String getName() {
 		return name;
+	}
+	
+	@Override
+	public ItemStack getGUIIcon() {
+		return CoreInventory.createButton(SuctionGUI.iconMat, "&6Suction", "", "&7lore todo");
 	}
 	
 	@Override

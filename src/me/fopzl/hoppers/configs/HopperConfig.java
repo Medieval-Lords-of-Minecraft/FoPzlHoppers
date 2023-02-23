@@ -33,7 +33,7 @@ public class HopperConfig {
 		}
 	}
 	
-	public static Set<HopperModule> getModules(Hopper hopper) {
+	public static Set<HopperModule> getNewModules(Hopper hopper) {
 		Set<HopperModule> modules = new HashSet<HopperModule>();
 
 		for (var func : moduleConstructors.get(hopper.getLevel())) {
