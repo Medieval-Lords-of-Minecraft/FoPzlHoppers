@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -16,10 +17,34 @@ import me.neoblade298.neocore.bukkit.NeoCore;
 import me.neoblade298.neocore.bukkit.io.IOComponent;
 
 public class HopperIO implements IOComponent {
-
+	private boolean cleaned = false;
+	
 	@Override
 	public void cleanup(Statement insert, Statement delete) {
 		autosave(insert, delete);
+		cleaned = true;
+	}
+	
+	public void tryCleanup() {
+		if (cleaned)
+			return;
+
+		try (Connection con = NeoCore.getConnection("FoPzlHoppersIOSave")) {
+			Statement insert = con.createStatement();
+			Statement delete = con.createStatement();
+
+			cleanup(insert, delete);
+			delete.executeBatch();
+			insert.executeBatch();
+
+			insert.close();
+			delete.close();
+			con.close();
+		} catch (SQLException e) {
+			Bukkit.getLogger().warning("[FHOP] WARNING!!! Failed to load data from sql!!!");
+			e.printStackTrace();
+			FoPzlHoppers.getInstance().onDisable();
+		}
 	}
 	
 	@Override
@@ -45,6 +70,8 @@ public class HopperIO implements IOComponent {
 	}
 	
 	public static void loadData() {
+		HopperManager manager = FoPzlHoppers.getHopperManager();
+		
 		try (Connection con = NeoCore.getConnection("FoPzlHoppersIOLoad")) {
 			Statement stmt = con.createStatement();
 
@@ -59,8 +86,10 @@ public class HopperIO implements IOComponent {
 				UUID ownerUUID = UUID.fromString(rs.getString("ownerUUID"));
 				int level = rs.getInt("level");
 
-				Hopper hopper = new Hopper(loc, ownerUUID, level);
-				FoPzlHoppers.getHopperManager().addHopper(hopper);
+				if (loc.getBlock().getType() == Material.HOPPER) {
+					Hopper hopper = new Hopper(loc, ownerUUID, level);
+					manager.addHopper(hopper);
+				}
 			}
 			rs.close();
 			
@@ -75,7 +104,9 @@ public class HopperIO implements IOComponent {
 				String moduleName = rs.getString("moduleName");
 				String data = rs.getString("data");
 				
-				FoPzlHoppers.getHopperManager().getHopper(loc).sqlLoad(moduleName, data);
+				if (manager.isHopper(loc)) {
+					manager.getHopper(loc).sqlLoad(moduleName, data);
+				}
 			}
 			rs.close();
 
