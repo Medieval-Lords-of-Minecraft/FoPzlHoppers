@@ -44,7 +44,7 @@ public abstract class HopperModule {
 
 	public abstract String getName();
 
-	public abstract ItemStack getGUIIcon();
+	public abstract ItemStack getGUIIcon(); // specified here so lore can be applied with hopper-specific data
 	
 	protected abstract void onEnable();
 	

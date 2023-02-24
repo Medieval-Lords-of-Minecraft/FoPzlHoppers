@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -18,14 +19,13 @@ import org.bukkit.inventory.ItemStack;
 import me.fopzl.hoppers.Hopper;
 import me.fopzl.hoppers.ModuleRegistry;
 import me.fopzl.hoppers.gui.modules.ModuleGUI;
-import me.fopzl.hoppers.util.FunctionExtensions.TriFunction;
 import me.fopzl.hoppers.util.tuples.Pair;
 import me.neoblade298.neocore.bukkit.inventories.CoreInventory;
 
 public class HopperGUI extends CoreInventory {
 	private final Hopper hopper;
 	
-	private Map<Integer, TriFunction<Player, Inventory, Hopper, ModuleGUI>> guiOpeners;
+	private Map<Integer, BiFunction<Player, Hopper, ModuleGUI>> guiOpeners;
 	
 	public HopperGUI(Player viewer, Inventory inv, Hopper hopper) {
 		super(viewer, inv);
@@ -45,7 +45,7 @@ public class HopperGUI extends CoreInventory {
 		
 		ItemStack[] items = inv.getContents();
 		
-		guiOpeners = new HashMap<Integer, TriFunction<Player, Inventory, Hopper, ModuleGUI>>();
+		guiOpeners = new HashMap<Integer, BiFunction<Player, Hopper, ModuleGUI>>();
 		int addedCnt = 0;
 		for (int slot : getButtonSlots(moduleButtons.size())) {
 			var pair = moduleButtons.get(addedCnt++);
@@ -58,24 +58,28 @@ public class HopperGUI extends CoreInventory {
 	
 	@Override
 	public void handleInventoryClick(InventoryClickEvent e) {
-		// TODO Auto-generated method stub
+		if (e.getClickedInventory() == inv)
+			e.setCancelled(true);
 		
+		int slot = e.getRawSlot();
+		
+		if (guiOpeners.containsKey(slot)) {
+			guiOpeners.get(slot).apply(p, hopper);
+		}
 	}
 	
 	@Override
 	public void handleInventoryClose(InventoryCloseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	@Override
 	public void handleInventoryDrag(InventoryDragEvent e) {
-		// TODO Auto-generated method stub
-		
+		if (e.getRawSlots().parallelStream().anyMatch(x -> x < 27))
+			e.setCancelled(true);
 	}
 	
 	// utility
-	// assumes 27 slots total
+	// assumes 3 rows of 9 total
 	private static List<Integer> getButtonSlots(int moduleCount) {
 		List<Integer> slots = new ArrayList<Integer>();
 

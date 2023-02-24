@@ -1,7 +1,7 @@
 name: FoPzlHoppers
 main: me.fopzl.hoppers.FoPzlHoppers
 author: FoPzl
-depend: [NBTAPI]
+depend: [NeoCore, NBTAPI]
 version: 0.1
 api-version: 1.19
 commands:
