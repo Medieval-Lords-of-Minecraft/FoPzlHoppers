@@ -78,6 +78,9 @@ public class Hopper {
 	}
 
 	public void tick() {
+		if (!loc.isWorldLoaded() || loc.getWorld().isChunkLoaded(loc.getChunk())) // this is probably faster than separating with events and handling in HopperManager, but TODO: test to confirm
+			return;
+		
 		for (HopperModule module : modules) {
 			module.tick();
 		}
