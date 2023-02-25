@@ -1,7 +1,9 @@
 package me.fopzl.hoppers.modules;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.fopzl.hoppers.Hopper;
@@ -120,5 +122,15 @@ public class SuctionModule extends HopperModule {
 		tickPeriod = Integer.parseInt(parts[1]);
 
 		config.setSuckRange(Integer.parseInt(parts[2]));
+	}
+
+	@Override
+	public boolean hasGUI() {
+		return true;
+	}
+
+	@Override
+	public void openGUI(Player viewer) {
+		new SuctionGUI(viewer, Bukkit.createInventory(viewer, 9, "§6Suction Settings"), this);
 	}
 }

@@ -1,6 +1,5 @@
 package me.fopzl.hoppers.listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -9,7 +8,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import me.fopzl.hoppers.FoPzlHoppers;
 import me.fopzl.hoppers.Hopper;
-import me.fopzl.hoppers.gui.HopperGUI;
 
 public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -32,6 +30,6 @@ public class PlayerListener implements Listener {
 		 */
 		
 		e.setCancelled(true); // cancel opening the hopper's vanilla inventory
-		new HopperGUI(e.getPlayer(), Bukkit.createInventory(e.getPlayer(), 27, "§eLevel " + hopper.getLevel() + " §7Hopper"), hopper);
+		hopper.openGUI(e.getPlayer());
 	}
 }

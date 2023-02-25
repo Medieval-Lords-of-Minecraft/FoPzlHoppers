@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -17,15 +17,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import me.fopzl.hoppers.Hopper;
-import me.fopzl.hoppers.ModuleRegistry;
-import me.fopzl.hoppers.gui.modules.ModuleGUI;
-import me.fopzl.hoppers.util.tuples.Pair;
+import me.fopzl.hoppers.modules.HopperModule;
 import me.neoblade298.neocore.bukkit.inventories.CoreInventory;
 
 public class HopperGUI extends CoreInventory {
 	private final Hopper hopper;
 	
-	private Map<Integer, BiFunction<Player, Hopper, ModuleGUI>> guiOpeners;
+	private Map<Integer, Consumer<Player>> guiOpeners;
 	
 	public HopperGUI(Player viewer, Inventory inv, Hopper hopper) {
 		super(viewer, inv);
@@ -35,22 +33,22 @@ public class HopperGUI extends CoreInventory {
 	}
 	
 	private void setupButtons() {
-		List<Pair<String, ItemStack>> moduleButtons = new ArrayList<Pair<String, ItemStack>>();
+		List<HopperModule> moduleButtons = new ArrayList<HopperModule>();
 		for (var mod : hopper.getModules()) {
-			if (ModuleRegistry.hasGUI(mod.getName())) {
-				moduleButtons.add(Pair.with(mod.getName(), mod.getGUIIcon()));
+			if (mod.hasGUI()) {
+				moduleButtons.add(mod);
 			}
 		}
-		moduleButtons.sort(Comparator.comparing(Pair::getValue0));
+		moduleButtons.sort(Comparator.comparing(HopperModule::getName));
 		
 		ItemStack[] items = inv.getContents();
 		
-		guiOpeners = new HashMap<Integer, BiFunction<Player, Hopper, ModuleGUI>>();
+		guiOpeners = new HashMap<Integer, Consumer<Player>>();
 		int addedCnt = 0;
 		for (int slot : getButtonSlots(moduleButtons.size())) {
-			var pair = moduleButtons.get(addedCnt++);
-			guiOpeners.put(slot, ModuleRegistry.getGUIOpener(pair.getValue0()));
-			items[slot] = pair.getValue1();
+			var mod = moduleButtons.get(addedCnt++);
+			guiOpeners.put(slot, p -> mod.openGUI(p));
+			items[slot] = mod.getGUIIcon();
 		}
 		
 		inv.setContents(items);
@@ -64,7 +62,7 @@ public class HopperGUI extends CoreInventory {
 		int slot = e.getRawSlot();
 		
 		if (guiOpeners.containsKey(slot)) {
-			guiOpeners.get(slot).apply(p, hopper);
+			guiOpeners.get(slot).accept(p);
 		}
 	}
 	

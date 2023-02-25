@@ -1,5 +1,6 @@
 package me.fopzl.hoppers.modules;
 
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.fopzl.hoppers.Hopper;
@@ -57,4 +58,8 @@ public abstract class HopperModule {
 	public abstract String getSaveData();
 	
 	public abstract void loadData(String data);
+	
+	public abstract boolean hasGUI();
+	
+	public abstract void openGUI(Player viewer);
 }

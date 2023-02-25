@@ -6,15 +6,18 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.fopzl.hoppers.configs.HopperConfig;
+import me.fopzl.hoppers.gui.HopperGUI;
 import me.fopzl.hoppers.modules.HopperModule;
 
 public class Hopper {
@@ -145,6 +148,10 @@ public class Hopper {
 				module.loadData(data);
 			}
 		}
+	}
+	
+	public void openGUI(Player viewer) {
+		new HopperGUI(viewer, Bukkit.createInventory(viewer, 27, "§eLevel " + level + " §7Hopper"), this);
 	}
 	
 	public static ItemStack getItem(int level) {
