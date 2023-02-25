@@ -74,4 +74,11 @@ public class HopperManager {
 		}
 		updatedHoppers.clear();
 	}
+
+	public void sqlSaveClean(Statement insert, Statement delete) throws SQLException {
+		for (Hopper hopper : hoppers.values()) {
+			hopper.sqlSave(insert, delete);
+		}
+		updatedHoppers.clear();
+	}
 }

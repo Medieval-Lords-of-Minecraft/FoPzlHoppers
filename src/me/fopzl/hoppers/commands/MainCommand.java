@@ -25,6 +25,11 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 			return true;
 		}
 		
+		if (args.length >= 1 && args[0].equalsIgnoreCase("saveclean")) {
+			FoPzlHoppers.saveClean();
+			return true;
+		}
+		
 		if (args.length >= 3 && args[0].equalsIgnoreCase("give")) {
 			Player p = Bukkit.getPlayer(args[1]);
 			if (p == null)
@@ -51,6 +56,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 		if (args.length == 1) {
 			autos.add("give");
 			autos.add("reload");
+			autos.add("saveclean");
 		} else if (args.length == 2) {
 			return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
 		} else if (args.length == 3 && args[0].equalsIgnoreCase("give")) {

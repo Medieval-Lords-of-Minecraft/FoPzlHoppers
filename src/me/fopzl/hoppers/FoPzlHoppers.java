@@ -18,7 +18,7 @@ public class FoPzlHoppers extends JavaPlugin {
 	private static FoPzlHoppers instance;
 	private static HopperManager hopperManager;
 
-	private HopperIO io;
+	private static HopperIO io;
 
 	@Override
 	public void onEnable() {
@@ -32,13 +32,12 @@ public class FoPzlHoppers extends JavaPlugin {
 
 		ConfigManager.loadAllConfigs();
 		
-		HopperIO.loadData();
+		NeoCore.registerIOComponent(this, io = new HopperIO(), "FoPzlHoppersIO");
+		io.loadData();
 		
 		Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
 		Bukkit.getPluginManager().registerEvents(new HopperItemListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
-
-		NeoCore.registerIOComponent(this, io = new HopperIO(), "FoPzlHoppersIO");
 		
 		this.getCommand("fopzlhoppers").setExecutor(new MainCommand());
 		this.getCommand("fopzlhoppers").setTabCompleter(new MainCommand());
@@ -51,6 +50,7 @@ public class FoPzlHoppers extends JavaPlugin {
 		Bukkit.getLogger().info("[FHOP] FoPzlHoppers Disabled");
 		
 		io.tryCleanup();
+		Bukkit.getScheduler().cancelTasks(this);
 
 		super.onDisable();
 	}
@@ -58,6 +58,10 @@ public class FoPzlHoppers extends JavaPlugin {
 	public static void reload() {
 		ConfigManager.loadAllConfigs();
 		hopperManager.reloadAll();
+	}
+	
+	public static void saveClean() {
+		io.saveClean();
 	}
 	
 	public static FoPzlHoppers getInstance() {

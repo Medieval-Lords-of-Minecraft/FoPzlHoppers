@@ -41,7 +41,7 @@ public class HopperIO implements IOComponent {
 			delete.close();
 			con.close();
 		} catch (SQLException e) {
-			Bukkit.getLogger().warning("[FHOP] WARNING!!! Failed to load data from sql!!!");
+			Bukkit.getLogger().warning("[FHOP] Failed to save to SQL:");
 			e.printStackTrace();
 			FoPzlHoppers.getInstance().onDisable();
 		}
@@ -69,7 +69,7 @@ public class HopperIO implements IOComponent {
 	public void savePlayer(Player player, Statement insert, Statement delete) {
 	}
 	
-	public static void loadData() {
+	public void loadData() {
 		HopperManager manager = FoPzlHoppers.getHopperManager();
 		
 		try (Connection con = NeoCore.getConnection("FoPzlHoppersIOLoad")) {
@@ -111,6 +111,35 @@ public class HopperIO implements IOComponent {
 			rs.close();
 
 			stmt.close();
+			con.close();
+		} catch (SQLException e) {
+			Bukkit.getLogger().warning("[FHOP] WARNING!!! Failed to load data from sql!!!");
+			e.printStackTrace();
+			FoPzlHoppers.getInstance().onDisable();
+		}
+	}
+	
+	// deletes and resaves anew, so ghost hoppers are removed
+	public void saveClean() {
+		HopperManager manager = FoPzlHoppers.getHopperManager();
+		
+		try (Connection con = NeoCore.getConnection("FoPzlHoppersIOSave")) {
+			Statement stmt = con.createStatement();
+
+			stmt.execute("delete from fopzlhoppers_hoppers");
+			stmt.execute("delete from fopzlhoppers_modules");
+			
+			stmt.close();
+
+			Statement insert = con.createStatement();
+			Statement delete = con.createStatement();
+			manager.sqlSaveClean(insert, delete);
+
+			delete.executeBatch();
+			insert.executeBatch();
+
+			insert.close();
+			delete.close();
 			con.close();
 		} catch (SQLException e) {
 			Bukkit.getLogger().warning("[FHOP] WARNING!!! Failed to load data from sql!!!");
