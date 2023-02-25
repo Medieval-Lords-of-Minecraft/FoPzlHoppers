@@ -6,18 +6,14 @@ public class SuctionConfig extends ModuleConfig {
 	private int minTickPeriod;
 	private int maxTickPeriod;
 	private int tickPeriodDelta; // period increase when no items picked up, or decrease when any are
-	private int suckRange;
-
-	private int suckRangeSquared;
+	private int maxSuckRange;
 	
 	@Override
 	public void loadConfig(ConfigurationSection config) {
 		minTickPeriod = config.getInt("minTickPeriod", minTickPeriod);
 		maxTickPeriod = config.getInt("maxTickPeriod", maxTickPeriod);
 		tickPeriodDelta = config.getInt("tickPeriodDelta", tickPeriodDelta);
-		suckRange = config.getInt("suckRange", suckRange);
-		
-		suckRangeSquared = suckRange * suckRange;
+		maxSuckRange = config.getInt("maxSuckRange", maxSuckRange);
 	}
 
 	@Override
@@ -26,9 +22,7 @@ public class SuctionConfig extends ModuleConfig {
 		cfg.minTickPeriod = this.minTickPeriod;
 		cfg.maxTickPeriod = this.maxTickPeriod;
 		cfg.tickPeriodDelta = this.tickPeriodDelta;
-		cfg.suckRange = this.suckRange;
-		
-		cfg.suckRangeSquared = this.suckRangeSquared;
+		cfg.maxSuckRange = this.maxSuckRange;
 
 		return cfg;
 	}
@@ -45,16 +39,7 @@ public class SuctionConfig extends ModuleConfig {
 		return tickPeriodDelta;
 	}
 
-	public void setSuckRange(int range) {
-		suckRange = range;
-		suckRangeSquared = range * range;
-	}
-
-	public int getSuckRange() {
-		return suckRange;
-	}
-	
-	public int getSuckRangeSquared() {
-		return suckRangeSquared;
+	public int getMaxSuckRange() {
+		return maxSuckRange;
 	}
 }

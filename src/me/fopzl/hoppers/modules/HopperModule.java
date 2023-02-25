@@ -14,6 +14,10 @@ public abstract class HopperModule {
 		this.hopper = hopper;
 		this.enabled = false;
 	}
+	
+	public final Hopper getHopper() {
+		return hopper;
+	}
 
 	public final void enable() {
 		enabled = true;
