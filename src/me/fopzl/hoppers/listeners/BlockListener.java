@@ -2,6 +2,7 @@ package me.fopzl.hoppers.listeners;
 
 import java.util.UUID;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -14,6 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import de.tr7zw.nbtapi.NBTItem;
 import me.fopzl.hoppers.FoPzlHoppers;
 import me.fopzl.hoppers.Hopper;
+import me.fopzl.hoppers.configs.MainConfig;
+import me.neoblade298.neocore.bukkit.util.Util;
 
 public class BlockListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -21,7 +24,13 @@ public class BlockListener implements Listener {
 		if (e.getBlock().getType() != Material.HOPPER)
 			return;
 
-		// TODO: handle max hoppers per chunk here
+		int maxHoppers = MainConfig.getMaxHoppers();
+		if (maxHoppers != -1) {
+			if (countHoppersInChunk(e.getBlock().getChunk()) >= maxHoppers) {
+				Util.msg(e.getPlayer(), "");
+				return;
+			}
+		}
 		
 		NBTItem nbti = new NBTItem(e.getItemInHand());
 		if (!nbti.getBoolean("fopzlhopper"))
@@ -58,5 +67,21 @@ public class BlockListener implements Listener {
 		e.getBlock().setType(Material.AIR);
 		
 		e.setCancelled(true);
+	}
+	
+	// this is stupid but apparently efficient enough!
+	private int countHoppersInChunk(Chunk c) {
+		int cnt = 0;
+
+		for (int x = 0; x < 16; x++) {
+			for (int z = 0; z < 16; z++) {
+				for (int y = c.getWorld().getMinHeight(); y < c.getWorld().getMaxHeight(); y++) {
+					if (c.getBlock(x, y, z).getType() == Material.HOPPER)
+						cnt++;
+				}
+			}
+		}
+
+		return cnt;
 	}
 }

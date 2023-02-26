@@ -1,0 +1,3 @@
+# max hoppers per chunk (including vanilla)
+# set to -1 for no limit
+maxHoppers: -1
