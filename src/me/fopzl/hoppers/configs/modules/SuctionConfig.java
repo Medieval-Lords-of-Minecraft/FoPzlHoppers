@@ -15,7 +15,7 @@ public class SuctionConfig extends ModuleConfig {
 		tickPeriodDelta = config.getInt("tickPeriodDelta", tickPeriodDelta);
 		maxSuckRange = config.getInt("maxSuckRange", maxSuckRange);
 	}
-
+	
 	@Override
 	public SuctionConfig clone() {
 		SuctionConfig cfg = new SuctionConfig();

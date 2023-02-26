@@ -15,7 +15,7 @@ import me.neoblade298.neocore.bukkit.inventories.CoreInventory;
 public class SuctionModule extends HopperModule {
 	private final static String name = "suction";
 	
-	// todo: auto-disable after extremely long period with no pickups
+	// TODO: auto-disable after extremely long period with no pickups?
 	
 	private SuctionConfig config;
 
@@ -76,6 +76,8 @@ public class SuctionModule extends HopperModule {
 			return;
 		suckRange = range;
 		suckRangeSquared = range * range;
+
+		hopper.updated();
 	}
 
 	@Override
@@ -153,7 +155,7 @@ public class SuctionModule extends HopperModule {
 	
 	@Override
 	public void openGUI(Player viewer) {
-		new SuctionGUI(viewer, Bukkit.createInventory(viewer, 9, "§6Suction Settings"), this);
+		new SuctionGUI(viewer, Bukkit.createInventory(viewer, 9, "§eSuction Settings"), this);
 	}
 
 	public SuctionConfig getConfig() {
