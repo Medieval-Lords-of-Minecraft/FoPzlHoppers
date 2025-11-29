@@ -5,7 +5,8 @@
   <version>0.0.1-SNAPSHOT</version>
   
   <properties>
-	  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <neocore.system.path>${project.basedir}/resources/NeoCore-0.0.1-SNAPSHOT.jar</neocore.system.path>
   </properties>
   
   <build>
@@ -97,15 +98,14 @@
 	  <artifactId>item-nbt-api-plugin</artifactId>
 	  <version>2.11.1</version>
 	  <scope>provided</scope>
-	</dependency>
-	<dependency>
-		<groupId>NeoCore</groupId>
-		<artifactId>NeoCore</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-		<scope>system</scope>
-		<systemPath>C:/Users/Alex/Documents/MLMC/Coding Stuff/workspace/FoPzlHoppers/resources/NeoCore-0.0.1-SNAPSHOT.jar</systemPath>
-		<!-- because eclipse is garbage -->
-	</dependency>
+  </dependency>
+  <dependency>
+    <groupId>NeoCore</groupId>
+    <artifactId>NeoCore</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <scope>system</scope>
+    <systemPath>${neocore.system.path}</systemPath>
+  </dependency>
   </dependencies>
   
 </project>
