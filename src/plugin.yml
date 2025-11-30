@@ -1,9 +1,11 @@
 name: FoPzlHoppers
 main: me.fopzl.hoppers.FoPzlHoppers
 author: FoPzl
-depend: [NeoCore, NBTAPI]
-version: 0.1
-api-version: 1.19
+depend: 
+  - NeoCore
+  - NBTAPI
+version: "0.1"
+api: "1.19"
 commands:
    fopzlhoppers:
       aliases: [fhop]
